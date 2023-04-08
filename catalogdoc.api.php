@@ -40,7 +40,7 @@ Class CatalogDoc
 
         $this->doc_id = \CCatalogDocs::add(
             [
-                "DOC_TYPE" => \Bitrix\Catalog\StoreDocumentTable::TYPE_STORE_ADJUSTMENT,
+                "DOC_TYPE" => $arFields['DOC_TYPE'] ?: \Bitrix\Catalog\StoreDocumentTable::TYPE_STORE_ADJUSTMENT,
                 "SITE_ID" => $arFields['SITE_ID'] ?: 's1',
                 "DATE_DOCUMENT" => $arFields['DATE_DOCUMENT'] ?: date("d.m.Y H:i:s"),
                 "CREATED_BY" => $arFields['CREATED_BY'] ?: 1,
@@ -94,11 +94,27 @@ Class CatalogDoc
      */
     public function addElement(array $arFields) : void
     {
+        if( ! $arFields['STORE_TO'] )
+        {
+            throw new \Exception('Склад не указан!');
+        }
+
+        if( ! $arFields['ELEMENT_ID'] )
+        {
+            throw new \Exception('ID элемента (товара) не указан!');
+        }
+
+        if( ! $arFields['ELEMENT_IBLOCK_ID'] )
+        {
+            throw new \Exception('ID информационного блока не указан!');
+        }
+
         \CCatalogStoreDocsElement::add(
             [
                 "DOC_ID" => $this->doc_id,
                 "STORE_TO" => $arFields['STORE_TO'], # склад
                 "ELEMENT_ID" => $arFields['ELEMENT_ID'],
+                "ELEMENT_IBLOCK_ID" => $arFields['ELEMENT_IBLOCK_ID'],
                 "AMOUNT" => $arFields['AMOUNT'],
                 "PURCHASING_PRICE" => $arFields['PURCHASING_PRICE'] ?: 0,
                 "BASE_PRICE" => $arFields['BASE_PRICE'] ?: 0,
@@ -106,9 +122,8 @@ Class CatalogDoc
                 "BASE_PRICE_EXTRA_RATE" => $arFields['BASE_PRICE_EXTRA_RATE'] ?: 0,
                 "IS_MULTIPLY_BARCODE" => $arFields['IS_MULTIPLY_BARCODE'] ?: "N",
                 "RESERVED" => $arFields['RESERVED'] ?: 0,
-                "ELEMENT_IBLOCK_ID" => $arFields['ELEMENT_IBLOCK_ID'] ?: 42,
-                "ELEMENT_NAME" => $arFields['ELEMENT_NAME']
+                "ELEMENT_NAME" => $arFields['ELEMENT_NAME'] ?: 'Название'
             ]
         );
-    }Ј
+    }
 }
