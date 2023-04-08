@@ -87,7 +87,7 @@ $updateCatalogDoc = new CatalogDoc();
 $updateCatalogDoc->setId(7);
 
 // Изменить свойства документа
-$CatalogDoc->Update(
+$updateCatalogDoc->Update(
     [
         'TITLE' => "Новое название документа"
         ...
