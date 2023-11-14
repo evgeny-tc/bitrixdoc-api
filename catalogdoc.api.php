@@ -6,7 +6,7 @@
 
 namespace OffBitrix;
 
-Class CatalogDoc
+Class CatalogDocs
 {
     private int $doc_id;
 
@@ -48,8 +48,8 @@ Class CatalogDoc
                 "RESPONSIBLE_ID" => $arFields['RESPONSIBLE_ID'] ?: 1,
                 "COMMENTARY" => $arFields['COMMENTARY'] ?: '',
                 "TITLE" => $arFields['TITLE'],
-                "STATUS" => "N",
-                "WAS_CANCELLED" => "N",
+                "STATUS" => $arFields['STATUS'] ?: "N",
+                "WAS_CANCELLED" => $arFields['WAS_CANCELLED'] ?: "N",
                 "CONTRACTOR_ID" => "1",
                 "CURRENCY" => $arFields['CURRENCY'] ?: 'RUB', # EUR
                 "TOTAL" => intval($arFields['TOTAL'])
@@ -94,7 +94,7 @@ Class CatalogDoc
      */
     public function addElement(array $arFields) : void
     {
-        if( ! $arFields['STORE_TO'] )
+        if( ! $arFields['STORE_TO'] and ! $arFields['STORE_FROM'] )
         {
             throw new \Exception('Склад не указан!');
         }
@@ -109,10 +109,13 @@ Class CatalogDoc
             throw new \Exception('ID информационного блока не указан!');
         }
 
+        # b_catalog_docs_element
+        #
         \CCatalogStoreDocsElement::add(
             [
                 "DOC_ID" => $this->doc_id,
-                "STORE_TO" => $arFields['STORE_TO'], # склад
+                "STORE_TO" => $arFields['STORE_TO'], # склад прихода
+                "STORE_FROM" => $arFields['STORE_FROM'], # склад списания
                 "ELEMENT_ID" => $arFields['ELEMENT_ID'],
                 "ELEMENT_IBLOCK_ID" => $arFields['ELEMENT_IBLOCK_ID'],
                 "AMOUNT" => $arFields['AMOUNT'],
