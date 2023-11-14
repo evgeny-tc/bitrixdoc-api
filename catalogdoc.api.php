@@ -6,7 +6,7 @@
 
 namespace OffBitrix;
 
-Class CatalogDocs
+Class CatalogDoc
 {
     private int $doc_id;
 
