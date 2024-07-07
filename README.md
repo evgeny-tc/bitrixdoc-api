@@ -70,6 +70,11 @@ Array
 $CatalogDoc->Close();
 ```
 
+### Указать поставщика
+```php
+$CatalogDoc->addContractor(3, 101); // 3 - сущность контакт, 101 - id контакта
+```
+
 ### Изменить документ
 ```php
 // Если документ был создан в этом же экземпляре класса
@@ -94,3 +99,14 @@ $updateCatalogDoc->Update(
     ]
 );
 ```
+### Информация по документу
+```php
+$catalogDoc = new CatalogDoc();
+
+// Указать id документа
+$catalogDoc->setId(7);
+
+// Изменить свойства документа
+$data = $catalogDoc->getData();
+```
+

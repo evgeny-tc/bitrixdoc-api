@@ -21,6 +21,32 @@ Class CatalogDoc
     }
 
     /**
+     * Документ (ex)
+     * https://bxapi.ru/src/?module_id=catalog&name=CCatalogDocs::getList
+     * @return array
+     * @throws \Exception
+     */
+    public function getData() :  array
+    {
+        $query = \CCatalogDocs::getList(
+            [],
+            [
+                'ID' => $this->doc_id
+            ],
+            false,
+            false,
+            []
+        );
+
+        if( $data = $query->fetch() )
+        {
+            return $data;
+        }
+
+        throw new \Exception('Документ не найден!');
+    }
+
+    /**
      * Создать документ
      * @param array $arFields
      * @return int
@@ -91,6 +117,7 @@ Class CatalogDoc
      * Добавить позицию в документ
      * @param array $arFields
      * @return void
+     * @throws \Exception
      */
     public function addElement(array $arFields) : void
     {
@@ -126,6 +153,44 @@ Class CatalogDoc
                 "IS_MULTIPLY_BARCODE" => $arFields['IS_MULTIPLY_BARCODE'] ?: "N",
                 "RESERVED" => $arFields['RESERVED'] ?: 0,
                 "ELEMENT_NAME" => $arFields['ELEMENT_NAME'] ?: 'Название'
+            ]
+        );
+    }
+
+    /**
+     * Список товаров
+     * @return \Generator
+     */
+    public function getProducts() : \Generator
+    {
+        $query = \CCatalogStoreDocsElement::getList(
+            [
+                'ID' => 'DESC'
+            ],
+            [
+                'DOC_ID' => $this->doc_id
+            ]
+        );
+
+        while($row = $query->fetch())
+        {
+            yield $row;
+        }
+    }
+
+    /**
+     * Привязать поставщика
+     * @param int $entity_type_id
+     * @param int $entity_id
+     * @return void
+     */
+    public function addContractor(int $entity_type_id, int $entity_id) : void
+    {
+        \Bitrix\Crm\Integration\Catalog\Contractor\StoreDocumentContractorTable::add(
+            [
+                'DOCUMENT_ID' => $this->doc_id,
+                'ENTITY_ID' => $entity_id, // id поставщика
+                'ENTITY_TYPE_ID' => $entity_type_id // type_id (3 - контакт, 4 - компания)
             ]
         );
     }
