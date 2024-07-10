@@ -1,10 +1,10 @@
 # BitrixDoc
 
-PHP класс для работы с документами оприходования в Битрикс24
+PHP класс для работы с документами складского учета в Битрикс24
 
 ## Установка
 
-Подключите файл в свой скрипт:
+Подключите файл:
 ```php
 require 'path/to/catalogdoc.api.php';
 ```
@@ -14,16 +14,16 @@ require 'path/to/catalogdoc.api.php';
 use \OffBitrix\CatalogDoc;
 
 // экземпляр класса для работы с документом
-$CatalogDoc = new CatalogDoc();
+$catalogDoc = new CatalogDoc();
 
 // создать документ, получить его id
-$new_doc_id = $CatalogDoc->Open(
+$new_doc_id = $catalogDoc->Open(
     [
         'TITLE' => "Название документа"
     ]
 );
 ```
-Необязательные параметры:
+Доп. параметры:
 ```text
 Array
 (
@@ -42,17 +42,18 @@ Array
 
 ```php
 // добавить позиции в документ
-$CatalogDoc->addElement(
+$catalogDoc->addElement(
     [
-        'STORE_TO' => 1 // id склада
-        'ELEMENT_ID' => 123 // id элемента (товара)
-        'AMOUNT' => 500 // цены
-        'ELEMENT_NAME' => 'Продукт №1' // название элемента
-        'ELEMENT_IBLOCK_ID' => 11 // IBLOCK_ID - ID информационного блока. 
+        'STORE_TO' => 1, // id склада
+        'ELEMENT_ID' => 123, // id элемента (товара)
+        'AMOUNT' => 10, // количество
+        'PURCHASING_PRICE' => 120, // стоимость
+        'ELEMENT_NAME' => 'Продукт №1', // название элемента
+        'ELEMENT_IBLOCK_ID' => 14 // iblock_id товара
     ]
 );
 ```
-Необязательные параметры:
+Доп. параметры:
 ```text
 Array
 (
@@ -67,18 +68,18 @@ Array
 
 ```php
 // Провести документ
-$CatalogDoc->Close();
+$catalogDoc->Close();
 ```
 
 ### Указать поставщика
 ```php
-$CatalogDoc->addContractor(3, 101); // 3 - сущность контакт, 101 - id контакта
+$catalogDoc->addContractor(3, 101); // 3 - сущность контакт, 101 - id контакта
 ```
 
 ### Изменить документ
 ```php
 // Если документ был создан в этом же экземпляре класса
-$CatalogDoc->Update(
+$catalogDoc->Update(
     [
         'TITLE' => "Новое название документа"
         ...
@@ -106,7 +107,19 @@ $catalogDoc = new CatalogDoc();
 // Указать id документа
 $catalogDoc->setId(7);
 
-// Изменить свойства документа
+// массив
 $data = $catalogDoc->getData();
 ```
+### Список товаров документа
+```php
+$catalogDoc = new CatalogDoc();
 
+// Указать id документа
+$catalogDoc->setId(7);
+
+// генератор массива товаров
+foreach ($catalogDoc->getProducts() as $product)
+{
+    
+}
+```
