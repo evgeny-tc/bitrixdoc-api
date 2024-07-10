@@ -52,6 +52,13 @@ $catalogDoc->addElement(
         'ELEMENT_IBLOCK_ID' => 14 // iblock_id товара
     ]
 );
+
+// записать общую сумму документа
+$catalogDoc->Update(
+      [
+          'TOTAL' => 1200
+      ]
+);
 ```
 Доп. параметры:
 ```text
