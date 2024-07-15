@@ -64,23 +64,15 @@ Class CatalogDoc
             throw new \Exception('Поле TITLE не заполнено!');
         }
 
-        $this->doc_id = \CCatalogDocs::add(
-            [
-                "DOC_TYPE" => $arFields['DOC_TYPE'] ?: \Bitrix\Catalog\StoreDocumentTable::TYPE_STORE_ADJUSTMENT,
-                "SITE_ID" => $arFields['SITE_ID'] ?: 's1',
-                "DATE_DOCUMENT" => $arFields['DATE_DOCUMENT'] ?: date("d.m.Y H:i:s"),
-                "CREATED_BY" => $arFields['CREATED_BY'] ?: 1,
-                "MODIFIED_BY" => $arFields['MODIFIED_BY'] ?: 1,
-                "RESPONSIBLE_ID" => $arFields['RESPONSIBLE_ID'] ?: 1,
-                "COMMENTARY" => $arFields['COMMENTARY'] ?: '',
-                "TITLE" => $arFields['TITLE'],
-                "STATUS" => $arFields['STATUS'] ?: "N",
-                "WAS_CANCELLED" => $arFields['WAS_CANCELLED'] ?: "N",
-                "CONTRACTOR_ID" => "1",
-                "CURRENCY" => $arFields['CURRENCY'] ?: 'RUB', # EUR
-                "TOTAL" => intval($arFields['TOTAL'])
-            ]
-        );
+        $arFields['DOC_TYPE'] = $arFields['DOC_TYPE'] ?: \Bitrix\Catalog\StoreDocumentTable::TYPE_STORE_ADJUSTMENT;
+        $arFields['SITE_ID'] = $arFields['SITE_ID'] ?: 's1';
+        $arFields['DATE_DOCUMENT'] = $arFields['DATE_DOCUMENT'] ?: date("d.m.Y H:i:s");
+        $arFields['RESPONSIBLE_ID'] = $arFields['RESPONSIBLE_ID'] ?: 1;
+        $arFields['STATUS'] = $arFields['STATUS'] ?: 'N';
+        $arFields['WAS_CANCELLED'] = $arFields['WAS_CANCELLED'] ?: 'N';
+        $arFields['CURRENCY'] = $arFields['CURRENCY'] ?: 'RUB';
+
+        $this->doc_id = \CCatalogDocs::add($arFields);
 
         if( ! $this->doc_id )
         {
