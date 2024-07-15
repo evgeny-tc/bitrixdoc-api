@@ -174,6 +174,7 @@ Class CatalogDoc
      * Список документов
      * @param array|null $select
      * @param array|null $filter
+     * @param array|null $sort
      * @return \Generator
      */
     public static function getList(?array $select = ['*'], ?array $filter = [], ?array $sort = ['ID' => 'ASC']) : \Generator
