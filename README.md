@@ -130,3 +130,19 @@ foreach ($catalogDoc->getProducts() as $product)
     
 }
 ```
+### Поиск документов
+```php
+$docFilter = [
+    'DOC_TYPE' => [
+        \Bitrix\Catalog\StoreDocumentTable::TYPE_ARRIVAL,
+        \Bitrix\Catalog\StoreDocumentTable::TYPE_ARRIVAL
+    ],
+    '>=DATE_CREATE' => "01.01.2024",
+    'STATUS' => "Y"
+];
+
+foreach(\OffGroup\Sklad\Helper\CatalogDocs::getList(['*'], $docFilter) as $doc)
+{
+    
+}
+```

@@ -171,6 +171,40 @@ Class CatalogDoc
     }
 
     /**
+     * Список документов
+     * @param array|null $select
+     * @param array|null $filter
+     * @return \Generator
+     */
+    public static function getList(?array $select = ['*'], ?array $filter = [], ?array $sort = ['ID' => 'ASC']) : \Generator
+    {
+        $dbItems = \Bitrix\Catalog\StoreDocumentTable::getList(
+            [
+                'order' => $sort,
+                'select' => array_merge(
+                    $select,
+                    [ 'CONTRACTOR_DATA_' => 'CONTRACTOR_DATA.*']
+                ),
+                'filter' => $filter,
+                'runtime' => [
+                    new Reference(
+                        'CONTRACTOR_DATA',
+                        \Bitrix\Crm\Integration\Catalog\Contractor\StoreDocumentContractorTable::class,
+                        Join::on('this.ID', 'ref.DOCUMENT_ID'),
+                        ['join_type' => 'LEFT']
+                    )
+                ],
+                'data_doubling' => false
+            ]
+        );
+
+        while($row = $dbItems->fetch())
+        {
+            yield $row;
+        }
+    }
+
+    /**
      * Привязать поставщика
      * @param int $entity_type_id
      * @param int $entity_id
