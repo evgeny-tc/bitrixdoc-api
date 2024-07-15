@@ -141,7 +141,7 @@ $docFilter = [
     'STATUS' => "Y"
 ];
 
-foreach(\OffGroup\Sklad\Helper\CatalogDocs::getList(['*'], $docFilter) as $doc)
+foreach(\OffBitrix\CatalogDoc::getList(['*'], $docFilter) as $doc)
 {
     
 }
