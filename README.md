@@ -141,8 +141,17 @@ $docFilter = [
     'STATUS' => "Y"
 ];
 
-foreach(\OffBitrix\CatalogDoc::getList(['*'], $docFilter) as $doc)
+foreach(CatalogDoc::getList(['*'], $docFilter) as $doc)
 {
     
 }
+```
+### Пользовательские поля
+```php
+$catalogDoc = new CatalogDoc();
+
+// Указать id документа
+$catalogDoc->setId(7);
+
+$arFields = $catalogDoc->getUf();
 ```

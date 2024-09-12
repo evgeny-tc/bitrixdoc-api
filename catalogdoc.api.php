@@ -6,6 +6,8 @@
 
 namespace OffBitrix;
 
+use Bitrix\Catalog\StoreDocumentTable;
+
 Class CatalogDoc
 {
     private int $doc_id;
@@ -220,5 +222,48 @@ Class CatalogDoc
                 'ENTITY_TYPE_ID' => $entity_type_id // type_id (3 - контакт, 4 - компания)
             ]
         );
+    }
+
+    /**
+     * Получить пользовательские поля документа
+     * @return array
+     * @throws \Exception
+     */
+    public function getUf() : array
+    {
+        global $DB;
+
+        $fields = [];
+        $doc_type = '';
+
+        if( $this->doc_id )
+        {
+            $getData = $this->getData();
+            $doc_type = $getData['DOC_TYPE'];
+        }
+
+        $table_name = match ($doc_type) {
+            # приход
+            #
+            \Bitrix\Catalog\StoreDocumentTable::TYPE_ARRIVAL => 'b_uts_cat_store_document_a',
+
+            # списание
+            #
+            \Bitrix\Catalog\StoreDocumentTable::TYPE_DEDUCT => 'b_uts_cat_store_document_d',
+
+            default => ''
+        };
+
+        if( $table_name )
+        {
+            $results = $DB->Query("SELECT * FROM {$table_name} WHERE VALUE_ID = {$this->doc_id}");
+
+            if ($row = $results->Fetch())
+            {
+                $fields = $row;
+            }
+        }
+
+        return $fields;
     }
 }
