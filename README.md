@@ -107,6 +107,24 @@ $updateCatalogDoc->Update(
     ]
 );
 ```
+### Отменить проведение
+```php
+$catalogDoc = new CatalogDoc();
+
+// Указать id документа
+$catalogDoc->setId(7);
+
+// Отменить проведение
+$catalogDoc->Cancel();
+
+// ошибки
+$exception = $APPLICATION->GetException();
+
+ if( $exception and $exceptionMessage = $exception->GetString())
+{
+    throw new \Exception($exceptionMessage);
+}
+```
 ### Информация по документу
 ```php
 $catalogDoc = new CatalogDoc();

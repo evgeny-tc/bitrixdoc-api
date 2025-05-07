@@ -96,6 +96,17 @@ Class CatalogDoc
     }
 
     /**
+     * Отменить проведение
+     * @return void
+     */
+    public function Cancel() : void
+    {
+        $doc = new \CCatalogDocs;
+
+        $doc->cancellationDocument($this->doc_id);
+    }
+
+    /**
      * Изменить документ
      * @param array $arFields
      * @return void
